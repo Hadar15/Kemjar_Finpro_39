@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ArsipKu - Portal Arsip Internal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">INTERNAL DOCUMENT ARCHIVE</p>
+        <h1>ArsipKu</h1>
+      </div>
+      <span class="status"><i></i> Sistem aktif</span>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <section class="messages">
+          {% for category, message in messages %}
+            <div class="message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </section>
+      {% endif %}
+    {% endwith %}
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">PUSAT DOKUMEN</p>
+        <h2>Temukan arsip internal<br>lebih cepat.</h2>
+        <p class="muted">Cari, unggah, dan akses dokumen organisasi dari satu tempat.</p>
+      </div>
+      <div class="hero-mark">✦</div>
+    </section>
+
+    <section class="warning">
+      <span class="warning-icon">!</span>
+      <div>
+        <strong>Catatan unggah file besar</strong>
+        <p>Upload browser dibatasi 2 MB. Untuk kebutuhan lab, folder <code>/uploads/</code> mensimulasikan lokasi FTP anonymous.</p>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <form class="search" method="get">
+        <span>⌕</span>
+        <input name="q" value="{{ query }}" placeholder="Cari nama dokumen atau gunakan regex...">
+        <button type="submit">Cari</button>
+      </form>
+      <a class="button secondary" href="{{ url_for('export_report') }}">Export Report</a>
+    </section>
+
+    {% if search_error %}
+      <div class="message error">{{ search_error }}</div>
+    {% endif %}
+
+    <section class="content-grid">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">KOLEKSI UTAMA</p>
+            <h3>Dokumen terbaru</h3>
+          </div>
+          <span class="count">{{ documents|length }} dokumen</span>
+        </div>
+        <div class="document-list">
+          {% for document in documents %}
+            <article class="document">
+              <div class="file-icon">▤</div>
+              <div class="document-info">
+                <strong>{{ document.name }}</strong>
+                <span>{{ document.category }} · {{ document.size }}</span>
+              </div>
+              <button class="download" type="button" title="Demo download">↓</button>
+            </article>
+          {% else %}
+            <p class="empty">Tidak ada dokumen yang cocok.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="panel upload-panel">
+        <p class="eyebrow">ARSIPKAN FILE</p>
+        <h3>Unggah dokumen</h3>
+        <p class="muted">Maksimal 2 MB melalui browser.</p>
+        <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+          <label class="dropzone">
+            <span class="upload-symbol">↑</span>
+            <strong>Pilih file untuk diunggah</strong>
+            <span>PDF, DOCX, XLSX, JPG</span>
+            <input type="file" name="file" required>
+          </label>
+          <button class="button primary full" type="submit">Unggah file</button>
+        </form>
+        {% if uploaded %}
+          <div class="uploaded">
+            <strong>File di folder uploads</strong>
+            {% for filename in uploaded %}
+              <a href="{{ url_for('uploaded_file', filename=filename) }}">{{ filename }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </aside>
+    </section>
+
+    <footer>ArsipKu · Portal arsip internal untuk kebutuhan demonstrasi lokal</footer>
+  </main>
+</body>
+</html>

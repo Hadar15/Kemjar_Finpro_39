@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laporan Arsip</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="shell narrow">
+    <section class="panel report">
+      <p class="eyebrow">EXPORT REPORT</p>
+      <h1>Laporan arsip selesai</h1>
+      <p class="muted">Simulasi pemrosesan dokumen lokal dengan batas aman.</p>
+      <div class="metrics">
+        <div><strong>{{ items }}</strong><span>item diproses</span></div>
+        <div><strong>{{ "%.2f"|format(elapsed_ms) }} ms</strong><span>waktu proses</span></div>
+        <div><strong>{{ checksum }}</strong><span>checksum</span></div>
+      </div>
+      <a class="button primary" href="{{ url_for('index') }}">Kembali ke arsip</a>
+    </section>
+  </main>
+</body>
+</html>
