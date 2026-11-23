@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="id">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ product.name }} — ShopLab</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<nav class="nav wrap"><a class="brand" href="{{ url_for('home') }}">shop<span>lab</span><sup>®</sup></a><div class="nav-links"><a href="{{ url_for('home') }}">Shop</a></div><a class="bag" href="{{ url_for('cart') }}">Bag <b>{{ cart_count }}</b></a></nav>
+<main class="product-page wrap">
+  <div class="product-photo"><img src="{{ product.image_url }}" alt="{{ product.name }}"><span class="tag">{{ product.category }}</span></div>
+  <section class="product-info"><p class="kicker">SHOPLAB / {{ product.category|upper }}</p><h1>{{ product.name }}</h1><strong>${{ '%.2f'|format(product.price) }}</strong><p>{{ product.description }}</p><p class="stock">{{ product.stock }} items available</p><form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}"><button class="dark-btn" type="submit">Add to bag <span>+</span></button></form></section>
+</main>
+{% if related %}<section class="catalog wrap"><p class="kicker">YOU MAY ALSO LIKE</p><div class="product-grid">{% for item in related %}<article class="product"><div class="product-image"><a href="{{ url_for('product_detail', product_id=item.id) }}"><img src="{{ item.image_url }}" alt="{{ item.name }}"></a></div><div class="product-meta"><h3><a href="{{ url_for('product_detail', product_id=item.id) }}">{{ item.name }}</a></h3><span>${{ '%.2f'|format(item.price) }}</span></div></article>{% endfor %}</div></section>{% endif %}
+</body></html>
